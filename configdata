@@ -1,0 +1,176 @@
+$ locust --help
+Usage: locust [OPTIONS] [UserClass ...]
+
+Common options:
+  -h, --help            show this help message and exit  查看帮助信息并退出
+  -f LOCUSTFILE, --locustfile LOCUSTFILE
+                        Python module file to import, e.g. '../other.py'.  指定 locust 文件
+                        Default: locustfile
+  --config CONFIG       Config file path 指定配置文件
+  -H HOST, --host HOST  Host to load test in the following format: 指定测试系统的 host
+                        http://10.21.32.33
+  -u NUM_USERS, --users NUM_USERS 测试的虚拟用户数，仅与 `--headless` 参数一起使用
+                        Number of concurrent Locust users. Only used together
+                        with --headless
+  -r HATCH_RATE, --hatch-rate HATCH_RATE  每秒产生用户的速率，仅与 `--headless` 参数一起使用
+                        The rate per second in which users are spawned. Only
+                        used together with --headless
+  -t RUN_TIME, --run-time RUN_TIME  在指定时间后停止测试，例如 (300s,
+                        20m, 3h, 1h30m, etc.)，仅与 `--headless` 参数一起使用
+                        Stop after the specified amount of time, e.g. (300s,
+                        20m, 3h, 1h30m, etc.). Only used together with
+                        --headless
+  -l, --list            Show list of possible User classes and exit 显示可能的 User 类别列表并退出
+
+Web UI options:
+  --web-host WEB_HOST   Host to bind the web interface to. Defaults to '*'
+                        (all interfaces) 绑定 web 界面到 host，默认使用 `*`（所有界面）
+  --web-port WEB_PORT, -P WEB_PORT  Web 界面的运行端口
+                        Port on which to run web host
+  --headless            Disable the web interface, and instead start the load
+                        test immediately. Requires -u and -t to be specified.
+                        禁用 Web 界面，然后立即开始负载测试。需要指定 -u 和 -t。
+  --web-auth WEB_AUTH   Turn on Basic Auth for the web interface. Should be
+                        supplied in the following format: username:password
+                        给 Web 界面设置 Basic Auth。必须提供：username：password。
+                        设置后，打开 Locust 的 web 界面必须要输入账号密码
+  --tls-cert TLS_CERT   Optional path to TLS certificate to use to serve over
+                        HTTPS
+                        对于使用 HTTPS 的服务，提供服务的 TLS 证书的路径
+  --tls-key TLS_KEY     Optional path to TLS private key to use to serve over
+                        HTTPS
+                        对于使用 HTTPS 的服务，提供服务的 TLS 私钥的路径
+
+Master options:
+  Options for running a Locust Master node when running Locust distributed. A Master node need Worker nodes that connect to it before it can run load tests.
+  运行 Locust 分布式时运行 Locust Master节点的选项。主节点需要连接到它的辅助节点，然后它才能运行负载测试。
+
+  --master              Set locust to run in distributed mode with this
+                        process as master
+                        设置 Locust 运行时的主节点
+  --master-bind-host MASTER_BIND_HOST
+                        Interfaces (hostname, ip) that locust master should
+                        bind to. Only used when running with --master.
+                        Defaults to * (all available interfaces).
+                        Locust 主节点的接口（host，IP）。仅在与 --master 一起运行时使用。
+                        默认为 *。
+  --master-bind-port MASTER_BIND_PORT
+                        Port that locust master should bind to. Only used when
+                        running with --master. Defaults to 5557.
+                        Locust 主节点的端口，默认使用 5557，仅在与 --master 一起运行时使用
+  --expect-workers EXPECT_WORKERS
+                        How many workers master should expect to connect
+                        before starting the test (only when --headless used).
+                        在测试之前指定拥有多少个工作节点。（仅在与 --master 一起运行时使用）
+
+Worker options:
+
+  Options for running a Locust Worker node when running Locust distributed.
+  Only the LOCUSTFILE (-f option) need to be specified when starting a Worker, since other options such as -u, -r, -t are specified on the Master node.
+  运行 Locust 分布式运行的工作节点选项。
+  启动工作节点时，仅需要指定 locustfile（-f 选项），因为在其他选项（例如-u，-r，-t）是通过主节点指定。
+
+  --worker              Set locust to run in distributed mode with this
+                        process as worker
+                        在 Locust 分布式运行时，使用此参数指定当前 PC 为工作节点
+  --master-host MASTER_HOST
+                        Host or IP address of locust master for distributed
+                        load testing. Only used when running with --worker.
+                        Defaults to 127.0.0.1.
+                        指定 Locust 分布式执行的主节点地址。仅当与 --worker 参数同时运行时有效。
+                        默认为 127.0.0.1
+  --master-port MASTER_PORT
+                        The port to connect to that is used by the locust
+                        master for distributed load testing. Only used when
+                        running with --worker. Defaults to 5557.
+                        Locust 分布式运行时的主节点端口，仅在与 --worker 同时运行时有效。
+                        默认为5557
+
+Tag options:
+  Locust tasks can be tagged using the @tag decorator. These options let specify which tasks to include or exclude during a test.
+  可以使用 @tag 装饰器对 Locust 任务进行标记。这些选项使您可以指定在测试期间要包括或排除的任务。
+
+  -T [TAG [TAG ...]], --tags [TAG [TAG ...]]
+                        List of tags to include in the test, so only tasks
+                        with any matching tags will be executed
+                        要包含在测试中的标签列表，只有被包含的标签标记的任务才会被执行
+  -E [TAG [TAG ...]], --exclude-tags [TAG [TAG ...]]
+                        List of tags to exclude from the test, so only tasks
+                        with no matching tags will be executed
+                        要排除的标签列表，被指定的标签标记的任务在测试中不会被执行
+
+Request statistics options:
+请求统计信息选项：
+  --csv CSV_PREFIX      Store current request stats to files in CSV format.
+                        Setting this option will generate three files:
+                        将当前统计信息存储在 CSV 文件中，使用此选项会生成以下三个文件：
+                        [CSV_PREFIX]_stats.csv, [CSV_PREFIX]_stats_history.csv
+                        and [CSV_PREFIX]_failures.csv
+  --csv-full-history    Store each stats entry in CSV format to
+                        _stats_history.csv file
+                        将每个统计信息条目以 CSV 格式存储到 _stats_history.csv
+  --print-stats         Print stats in the console  将统计信息打印到控制台
+  --only-summary        Only print the summary stats  仅打印统计信息
+  --reset-stats         Reset statistics once hatching has been completed.
+                        Should be set on both master and workers when running
+                        in distributed mode
+                        测试完成后重置统计信息。在分布式模式下应同时设置主节点和工作节点
+
+Logging options:
+日志选项：
+  --skip-log-setup      Disable Locust's logging setup. Instead, the
+                        configuration is provided by the Locust test or Python
+                        defaults.
+                        禁用 Locust 日志。相反，配置由 Locust 测试或 Python 提供默认值。
+  --loglevel LOGLEVEL, -L LOGLEVEL
+                        Choose between DEBUG/INFO/WARNING/ERROR/CRITICAL.
+                        Default is INFO.
+                        选择日志级别，默认为 INFO
+  --logfile LOGFILE     Path to log file. If not set, log will go to
+                        stdout/stderr
+                        指定存放日志的文件路径。如果不设，日志仅显示在标准输出/标准错误
+
+Step load options:
+Step 加载选项：
+  --step-load           Enable Step Load mode to monitor how performance
+                        metrics varies when user load increases. Requires
+                        --step-users and --step-time to be specified.
+                        启用逐步加载模式以监视性能指标随着用户负载的增加而变化。
+                        需要同时指定 --step-users 和 --step-time。
+  --step-users STEP_USERS
+                        User count to increase by step in Step Load mode. Only
+                        used together with --step-load
+                        在逐步加载模式下，每步增加的用户数量。仅与 --step-load 一起使用
+
+  --step-time STEP_TIME
+                        Step duration in Step Load mode, e.g. (300s, 20m, 3h,
+                        1h30m, etc.). Only used together with --step-load
+                        逐步加载模式下，每步持续时间，例如（300s，20m，3h，1h30m等）。
+                        仅与--step-load一起使用
+
+Other options:
+其他选项：
+  --show-task-ratio     Print table of the User classes' task execution ratio. 打印 User 类的任务执行率
+  --show-task-ratio-json
+                        Print json data of the User classes' task execution
+                        ratio
+                        打印 User 类的任务执行率的 json 数据
+  --version, -V         Show program's version number and exit 显示 Locust 版本并退出
+  --exit-code-on-error EXIT_CODE_ON_ERROR
+                        Sets the process exit code to use when a test result
+                        contain any failure or error
+                        当测试结果包含失败或错误时，设置程序的退出码
+  -s STOP_TIMEOUT, --stop-timeout STOP_TIMEOUT
+                        Number of seconds to wait for a simulated user to
+                        complete any executing task before exiting. Default is
+                        to terminate immediately. This parameter only needs to
+                        be specified for the master process when running
+                        Locust distributed.
+                       虚拟用户在执行完成后退出等待的时间。默认为立即停止。
+                       分布式执行时，只需要在主进程中指定即可。
+
+User classes:
+  UserClass             Optionally specify which User classes that should be
+                        used (available User classes can be listed with -l or
+                        --list)
+                       （可选）指定哪些 User 类可使用（可用的 User 类可以用 -l 或 --list）
