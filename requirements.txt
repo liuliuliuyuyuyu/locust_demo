@@ -1,1 +1,2 @@
+gevent
 locust==1.4.1
